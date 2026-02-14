@@ -1,11 +1,33 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
 import ProductCard from './components/productCard'
+import AdminPage from '../pages/adminPage'
+import HomePage from '../pages/homePage'
+import TestPage from '../pages/test'
 
 function App() {
 
   return (
-    <>
-    <div className='h-[700px] w-[700px] border-[5px] relative flex justify-center items-center'>
+    <BrowserRouter>
+   <div className='w-full h-[100vh]'>
+
+    <Routes path="/">
+      <Route path="/*" element={<HomePage/>}/>
+      <Route path="/register" element={<h1>Register page</h1>}/>
+      <Route path="/admin/*" element={<AdminPage/>}/>
+      <Route path="/test" element={<TestPage/>}/>
+    </Routes>
+
+   </div>
+    </BrowserRouter>
+  )
+}
+
+export default App
+
+
+
+ {/* <div className='h-[700px] w-[700px] border-[5px] relative flex justify-center items-center'>
 
       <div className='h-[100px] w-[300px] bg-yellow-600 flex flex-row justify-center items-center'>
         <button className='text-white bg-green-800 absolute bottom-0 right-0 p-2'>How can i Help you</button>
@@ -17,7 +39,7 @@ function App() {
           </div>
 
         </div>
-    </div>
+    </div> */}
 
         {/* <div className='h-[100px] w-[100px] bg-green-600'>
         </div>
@@ -34,9 +56,3 @@ function App() {
     {/* <h1 className = "text-[#F87C63] text-5xl">Nadun Deshan</h1>
     <ProductCard name="Apple i pad" price="$499" image="https://www.apple.com/assets-www/en_WW/ipad/01_product_tile/large/ipad_air_81133a1a7_2x.jpg"/>
     <ProductCard name="Mac Book Pro" price="$1299" image="https://www.apple.com/v/macbook-air/x/images/overview/design/color/design_top_skyblue__eepkvlvjzcia_large_2x.jpg"/> */}
-
-    </>
-  )
-}
-
-export default App
