@@ -2,10 +2,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { CiCirclePlus } from "react-icons/ci";
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function AdminProductPage() {
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -45,6 +46,7 @@ export default function AdminProductPage() {
                 <th className="px-6 py-4">Product Name</th>
                 <th className="px-6 py-4">Product Price</th>
                 <th className="px-6 py-4">Labeled Price</th>
+                <th className="px-6 py-4">Stock</th>
                 <th className="px-6 py-4">Category</th>
                 <th className="px-6 py-4 text-center">Actions</th>
               </tr>
@@ -79,7 +81,10 @@ export default function AdminProductPage() {
                   </td>
 
                   <td className="px-6 py-4 text-secondary/70 line-through">
-                    Rs. {item.labalPrice}
+                    Rs. {item.labelledPrice}
+                  </td>
+                  <td className="px-6 py-4 text-secondary/70 ">
+                     {item.stock}
                   </td>
 
                   <td className="px-6 py-4">
@@ -91,7 +96,13 @@ export default function AdminProductPage() {
                   <td className="px-6 py-4">
                     <div className="flex gap-4 justify-center items-center text-xl">
                       <FaRegTrashAlt className="hover:text-red-600 transition cursor-pointer" />
-                      <FaRegEdit className="hover:text-accent transition cursor-pointer" />
+                      <FaRegEdit className="hover:text-accent transition cursor-pointer" 
+                      onClick={()=>{
+                        navigate("/admin/update-product", {
+                          state : item
+                        })
+                      }} 
+                      />
                     </div>
                   </td>
                 </tr>

@@ -1,56 +1,63 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import mediaUpload from "../../utils/mediaUpload";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 
-export function AddProductPage() {
-  const [productID, setProductId] = useState("");
-  const [name, setName] = useState("");
-  const [altName, setAltNames] = useState("");
-  const [description, setDescription] = useState("");
+export function UpdateProductPage() {
+  const location = useLocation();
+  const [productID, setProductId] = useState(location.state.productID); 
+  const [name, setName] = useState(location.state.name);
+  const [altNames, setAltNames] = useState(location.state.altName.join(","));
+  const [description, setDescription] = useState(location.state.description);
   const [images, setImages] = useState([]);
-  const [price, setPrice] = useState(0);
-  const [labelledPrice, setLablledPrice] = useState(0);
-  const [catogory, setCatogory] = useState("cream");
-  const [stock, setStock] = useState(0);
-  const navigate= useNavigate();
+  const [price, setPrice] = useState(location.state.price);
+  const [labelledPrice, setLablledPrice] = useState(location.state.labelledPrice);
+  const [catogory, setCatogory] = useState(location.state.catagory);
+  const [stock, setStock] = useState(location.state.stock);
+  const navigate = useNavigate();
 
-  async function addProduct(params) {
-    const token =localStorage.getItem("token");
-    if(token==null){
-        navigate("/login");
-        return
+  async function updateProduct(params) {
+    const token = localStorage.getItem("token");
+    if (token == null) {
+      navigate("/login");
+      return;
     }
-    const promises= []
-    for(let i=0; i<images.length; i++){
-        promises[i] = mediaUpload(images[i])
+    const promises = [];
+    for (let i = 0; i < images.length; i++) {
+      promises[i] = mediaUpload(images[i]);
     }
-    try{const urls =await Promise.all(promises);
-        const alternativeNames = altNames.split(",");
-
-        const product={
-            productID :productID,
-            name :name,
-            altName :alternativeNames,
-            description :description,
-            images :urls,
-            price :price,
-            labelledPrice :labelledPrice,
-            catagory :catogory,
-            stock  :stock
+    try {
+      let urls = await Promise.all(promises);
+        if(urls.length == 0){
+            urls=location.state.images
         }
 
-        await axios.post(import.meta.env.VITE_API_URL+"/api/products",product,{
-            headers:{
-                Authorization : "Bearer "+token
-            }
-        })
-        toast.success("Product Added Successfully");
-        navigate("/admin/products");
+      const alternativeNames = altNames.split(",");
 
-    }catch{
-        toast.error("An error occured");
+      const product = {
+        productID: productID,
+        name: name,
+        altName: alternativeNames,
+        description: description,
+        images: urls,
+        price: price,
+        labelledPrice: labelledPrice,
+        catagory: catogory,
+        stock: stock,
+      };
+
+      await axios.put(
+        import.meta.env.VITE_API_URL + "/api/products/"+productID,product,{
+          headers: {
+            Authorization: "Bearer " + token
+          },
+        },
+      );
+      toast.success("Product Upded Successfully");
+      navigate("/admin/products");
+    } catch {
+      toast.error("An error occured");
     }
   }
 
@@ -60,9 +67,9 @@ export function AddProductPage() {
       <div className="w-full max-w-3xl rounded-3xl border border-white/20 bg-white/10 backdrop-blur-xl shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="px-8 py-6 bg-primary/50 border-b border-white/15">
-          <h1 className="text-2xl font-bold text-secondary">Add New Product</h1>
+          <h1 className="text-2xl font-bold text-secondary">Update Product</h1>
           <p className="text-base text-secondary/70 mt-1">
-            Fill in product details to add it to your store.
+            Fill in product details to update it to your store.
           </p>
           <div className="mt-4 h-1 w-24 rounded-full bg-accent" />
         </div>
@@ -76,6 +83,7 @@ export function AddProductPage() {
                 Product ID
               </label>
               <input
+              disabled
                 value={productID}
                 onChange={(e) => {
                   setProductId(e.target.value);
@@ -224,15 +232,17 @@ export function AddProductPage() {
 
           {/* Footer actions (UI only, no logic added) */}
           <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:justify-end">
-            <button onClick={()=>{
-                navigate("/admin/products")
-            }}
+            <button
+              onClick={() => {
+                navigate("/admin/products");
+              }}
               type="button"
               className="h-12 px-6 rounded-xl bg-red-500 text-white font-semibold ring-1 ring-white/20 hover:border-[4px] hover:border-accent "
             >
               Cancel
             </button>
-            <button onClick={addProduct}
+            <button
+              onClick={updateProduct}
               type="button"
               className="h-12 px-6 rounded-xl bg-accent text-white font-semibold shadow-lg shadow-accent/30 hover:brightness-110 active:scale-[0.99] transition hover:border-[4px]"
             >
@@ -244,51 +254,3 @@ export function AddProductPage() {
     </div>
   );
 }
-
-
-
-
-
-// import { useState } from "react";
-
-// export function AddProductPage() {
-//     const [productID,setProductId]= useState("")
-//     const [name,setName]= useState("")
-//     const [altNames,setAltNames]= useState("")
-//     const [description,setDescription]= useState("")
-//     const [images,setImages]= useState([])
-//     const [price,setPrice]= useState(0)
-//     const [labelledPrice,setLablledPrice]= useState(0)
-//     const [catogory,setCatogory]= useState("cream")
-//     const [stock,setStock]= useState(0)
-
-//   return (
-//     <div className="w-full h-full flex justify-center items-center">
-//         <div className="w-[600px] h-[300px] border-accent border-[2px] flex flex-col items-center justify-center">
-//             <input value={productID} onChange={(e)=>{setProductId(e.target.value)}} />
-//             <input value={name} onChange={(e)=>{setName(e.target.value)}} />
-//             <input value={altNames} onChange={(e)=>{setAltNames(e.target.value)}} />
-//             <textarea value={description} onChange={(e)=>{setDescription(e.target.value)}} />
-//             <input type="file" onChange={(e)=>{setImages(e.target.files)}} multiple />
-//             <input type="number" value={price} onChange={(e)=>{setPrice(e.target.value)}} />
-//             <input type="number" value={labelledPrice} onChange={(e)=>{setLablledPrice(e.target.value)}} />
-//             <select value={catogory} onChange={(e)=>{setCatogory(e.target.value)}}>
-//                 <option value="cream">Cream</option>
-//                 <option value="lotion">Lotion</option>
-//                 <option value="serum">Serum</option>
-//             </select>
-//             <input type="number" value={stock} onChange={(e)=>{setStock(e.target.value)}} />
-
-//         </div>
-//     </div>);
-// }
-//     // {
-//     //   productID
-//     //   name
-//     //   altName
-//     //   images
-//     //   price
-//     //   labalPrice
-//     //   catagory
-//     //   stock 
-//     //   }
