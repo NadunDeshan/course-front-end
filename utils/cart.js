@@ -14,7 +14,7 @@ export function addToCart(product,quantity){
 
     const existingItemIndex = cart.findIndex(
         (item) =>{
-            return item.productID == product
+            return item.productID == product.productID
         } 
     )
     if (existingItemIndex==-1){
@@ -47,9 +47,17 @@ export function addToCart(product,quantity){
                 }
             )
         }else{
-            cart[existingItem].quantity = newQuantity;
+            cart[existingItemIndex].quantity = newQuantity;
         }
     }
     localStorage.setItem("cart",JSON.stringify(cart));
 
+}
+export function getTotal(){
+    const cart = loadCart();
+    let total = 0;
+    cart.forEach((item)=>{
+        total+=item.price*item.quantity;
+    });
+    return total;
 }

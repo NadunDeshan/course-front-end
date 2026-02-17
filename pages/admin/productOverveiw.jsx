@@ -1,9 +1,10 @@
 import axios from "axios";
 import {useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Loader } from "../../src/components/loader,";
 import ImageSlider from "../../src/components/imageSlider";
+import { addToCart, loadCart } from "../../utils/cart";
 
 export default function ProductOverview(){
 
@@ -64,8 +65,22 @@ export default function ProductOverview(){
                                 <span className="text-accent">LKR {product.price.toFixed(2)}</span>
                             }
                             <div className="w-full h-[40px] flex gap-4 mt-[60px]">
-                                <button className="w-full h-full bg-accent text-white hover:bg-white hover:text-accent border border-accent">Add to cart</button>
-                                <button className="w-full h-full bg-red-600 text-white hover:bg-white hover:text-red-600 border border-red-600">Delete Product</button>
+                                <button className="w-full h-full bg-accent text-white hover:bg-white hover:text-accent border border-accent"
+                                onClick={()=>{
+                                    addToCart(product,1)
+                                    toast.success(" added to cart successfully")
+                                }
+
+                                }>Add to cart</button>
+                                <Link to="/checkout" state={[{
+                                    image:product.images[0],
+                                    productID:product.productID,
+                                    name:product.name,
+                                    price:product.price,
+                                    labelledPrice:product.labelledPrice,
+                                    quantity:1
+                                }]}className="w-full h-full bg-red-600 text-white hover:bg-white hover:text-red-600 border border-red-600 flex justify-center items-center"
+                                >Buy Now</Link>
 
                             </div>
 
