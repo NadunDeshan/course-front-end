@@ -2,10 +2,13 @@ import { CiCircleChevDown, CiCircleChevUp } from "react-icons/ci";
 
 import { BiTrash } from "react-icons/bi";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 export default function CheckoutPage() {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [cart, setCart] = useState(location.state);
 
@@ -15,6 +18,46 @@ export default function CheckoutPage() {
       total += item.price * item.quantity;
     });
     return total;
+  }
+  async function purchaseCart() {
+    const token = localStorage.getItem("token");
+    if(token == null){
+      toast.error("Please login to place and order");
+      navigate("/login")
+      return
+    }
+    try{
+        const items = []
+        for (let i = 0; i < cart.length; i++) {
+          items.push({
+            productID : cart[i].productID,
+            quantity : cart[i].quantity
+          })
+        }
+
+
+       await axios.post(import.meta.env.VITE_API_URL+"/api/orders",{
+        address : "No. 66/1a Main street .city",
+        items : items
+
+      },{
+        headers :{
+          Authorization : "Bearer "+token
+        }
+      })
+    toast.success("Order placed successfully");
+    }catch(error){
+      toast.error("Failed to place order");
+      console.log(error);
+
+      //error is 400
+      if(error.response && error.response.status === 400){
+       
+        toast.error(error.response.data.message);
+       
+      }
+    }
+
   }
 
   return (
@@ -85,6 +128,7 @@ export default function CheckoutPage() {
         <div className="w-full h-[120px] bg-white flex justify-end items-center relative">
           <button
             to="/checkout"
+            onClick={purchaseCart}
             className="w-[200px] h-[50px] bg-accent text-white font-semibold text-2xl flex left-0 absolute justify-center items-center"
           >
             Order
