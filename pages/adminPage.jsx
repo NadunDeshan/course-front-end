@@ -1,4 +1,4 @@
-import { Route, Routes ,Link } from "react-router-dom";
+import { Route, Routes ,Link, useNavigate } from "react-router-dom";
 import { FaChartLine } from "react-icons/fa";
 import { MdShoppingCartCheckout } from "react-icons/md";
 import { LuBoxes } from "react-icons/lu";
@@ -7,8 +7,43 @@ import AdminProductPage from "./admin/adminProduct";
 import { AddProductPage } from "./admin/adminAddNewProduct";
 import { UpdateProductPage } from "./admin/adminUpdateProduct";
 import AdminOrdersPage from "./admin/adminOrdersPage";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { Loader } from "../src/components/loader,";
 
 export default function AdminPage(){
+
+    const[userLoaded, setUserLoaded] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect( ()=>{
+        const token = localStorage.getItem("token");
+        if(token==null){
+            toast.error("Please login to access admin panel");
+            navigate("/login");
+            return
+        }
+        axios.get(import.meta.env.VITE_API_URL + "/api/users/me",{
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }).then((response) => {
+            if (response.data.role !== "admin") {
+                toast.error("You are not authorized to access this page");
+                navigate("/");
+                return 
+            } 
+            setUserLoaded(true);
+          }).catch(() => {
+            toast.error("Session Expired Please login again");
+            localStorage.removeItem("token");
+            window.location.href="/login";
+          });
+             
+    } , [])
+
+
     return(
     
         <div className="w-full h-full bg-primary p-2.5 flex">
@@ -51,13 +86,13 @@ export default function AdminPage(){
         
             <div className="h-full w-[calc(100%-300px)] border-[4px] border-accent rounded-[20px] overflow-hidden">
                 <div className=" h-full max-h-full w-full max-w-full overflow-y-scroll">
-                <Routes path="/">
+                {userLoaded?<Routes path="/">
                     <Route path="/" element={<h1>Dashbord</h1>}/>
                     <Route path="/products" element={<AdminProductPage/>}/>
                     <Route path="/orders" element={<AdminOrdersPage/>}/>
                     <Route path="/add-product" element={<AddProductPage/>}/>
                     <Route path ="/update-product" element={<UpdateProductPage/>}/>
-                </Routes>
+                </Routes>:<Loader/>}
                 </div>
             </div>
         </div>

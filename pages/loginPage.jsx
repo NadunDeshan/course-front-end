@@ -1,14 +1,35 @@
+import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate()
+  const googleLogin = useGoogleLogin({
+      onSuccess: (response)=>{
+        axios.post(import.meta.env.VITE_API_URL+"/api/users/google-login",{
+          token:response.access_token
+        }).then((response)=>{
+          localStorage.setItem("token",response.data.token)
+          const user = response.data.user;
+          if (user.role == "admin") {
+            navigate("/admin");
+          } else {
+            navigate("/");
+          }
+        }).catch((error)=>{
+          console.error("login failed", error);
+          toast.error("Google Login Failed Please check your credincials")
+        })
+      }
+  })
+         
 
-  async function login() {
+
+   async function login() {
     try {
       const response = await axios.post(
         import.meta.env.VITE_API_URL + "/api/users/login",
@@ -30,9 +51,7 @@ export default function LoginPage() {
       console.error("login failed", e);
       toast.error("Login Failed Please check your credincials")
     }
-  }
-
-  return (
+  }return (
     <div className="relative w-full h-screen bg-[url('/bg.jpg')] bg-cover bg-center">
       {/* overlay for better readability */}
       <div className="absolute inset-0 bg-secondary/60" />
@@ -117,10 +136,19 @@ export default function LoginPage() {
                   >
                     Login
                   </button>
+                  <button
+                    onClick={googleLogin}
+                    className="mt-2 w-full h-11 rounded-xl bg-accent text-white font-semibold shadow-lg shadow-accent/30 hover:brightness-110 active:scale-[0.99] transition"
+                  >
+                    Google Login
+                  </button>
 
                   <div className="pt-4 flex items-center justify-center gap-2 text-xs text-white/60">
                     <span className="h-px w-12 bg-white/20" />
-                    <span>ND Crystal Beauty Clear</span>
+                    <span>New to ND ? </span>
+                    <Link to="/register"
+                    className="text-accent hover:underline underline-offset-4"
+                    >Create you</Link>
                     <span className="h-px w-12 bg-white/20" />
                   </div>
                 </div>
