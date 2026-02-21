@@ -29,8 +29,8 @@ export default function RegisterPage() {
       toast.success("Registration Successfull..Please Login");
       navigate("/login"); 
     } catch (e) {
-      console.error("login failed", e);
-      toast.error("Login Failed Please check your credincials");
+      console.error("register failed", e);
+      toast.error("Registration failed. Please try again");
     }
   }
 
@@ -108,7 +108,7 @@ export default function RegisterPage() {
                   <div className="space-y-2">
                     <label className="text-sm text-white/80">Confirm Password</label>
                     <input
-                      type="confirmPassword"
+                      type="password"
                       placeholder="••••••••"
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       className="w-full h-11 rounded-xl bg-white/90 px-4 text-secondary placeholder:text-secondary/50 outline-none ring-1 ring-white/20 focus:ring-2 focus:ring-accent transition"

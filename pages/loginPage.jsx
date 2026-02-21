@@ -129,6 +129,9 @@ export default function LoginPage() {
                       className="w-full h-11 rounded-xl bg-white/90 px-4 text-secondary placeholder:text-secondary/50 outline-none ring-1 ring-white/20 focus:ring-2 focus:ring-accent transition"
                     />
                   </div>
+                  <div className="flex items-center justify-end">
+                    <Link to="/forget-password" className="text-accent hover:underline underline-offset-4">Forgot Password ?</Link>
+                  </div>
 
                   <button
                     onClick={login}
