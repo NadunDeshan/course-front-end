@@ -109,7 +109,7 @@ export default function UserData() {
               <button
                 onClick={() => {
                   setOpen(false);
-                  navigate("/account");
+                  navigate("/settings");
                 }}
                 className="w-full flex items-center gap-2 px-4 py-3 text-secondary hover:bg-white/10 transition"
               >
