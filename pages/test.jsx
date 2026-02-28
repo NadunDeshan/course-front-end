@@ -1,7 +1,14 @@
-import { useState } from "react";
-import mediaUpload from "../utils/mediaUpload";
 
 export default function TestPage() {
+  return <div className="w-full h-full flex flex-col">
+
+      <div className="h-[100px] bg-black">Header</div>
+
+      <div className="w-full min-h-[calc(100vh-100px)] bg-purple-300">
+      Content area
+      </div>
+      </div>
+}
 
 
   
@@ -24,7 +31,7 @@ export default function TestPage() {
   //     </button>
   //   </div>
   // );
-}
+
 
 // const [c,d]=useState(150)
 

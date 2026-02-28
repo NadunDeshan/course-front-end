@@ -8,7 +8,7 @@ import CheckoutPage from "./admin/checkout";
 export default function HomePage(){
 
     return(
-        <div className="w-full h-full bg-primary">
+        <div className="w-full h-full bg-purple-500">
         <Header/>
 
         <Routes path="/">
