@@ -51,27 +51,29 @@ export default function LoginPage() {
       console.error("login failed", e);
       toast.error("Login Failed Please check your credincials")
     }
-  }return (
-    <div className="relative w-full h-screen bg-[url('/bg.jpg')] bg-cover bg-center">
-      {/* overlay for better readability */}
-      <div className="absolute inset-0 bg-secondary/60" />
+  }
 
-      <div className="relative z-10 w-full h-full grid grid-cols-1 lg:grid-cols-2">
+  return (
+    <div className="relative w-full min-h-screen bg-[url('/bg2.jpg')] bg-cover bg-center bg-no-repeat">
+      {/* overlay for better readability */}
+      <div className="absolute inset-0 bg-black/60" />
+
+      <div className="relative z-10 w-full min-h-screen grid grid-cols-1 lg:grid-cols-2">
         {/* Left side (branding) */}
         <div className="hidden lg:flex flex-col justify-between p-12">
-          <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="ND Logo" className="h-10 w-auto" />
+          <div className="flex gap-3 flex-col">
+            <img src="/logo1.png" alt="RIDEX Logo" className="h-70 w-auto object-cover" />
             <div className="text-white">
-              <p className="text-sm tracking-wider uppercase opacity-90">
-                ND • Crystal Beauty Clear
+              {/* <p className="text-sm tracking-wider uppercase opacity-90">
+                RIDEX ACCESSORIES
               </p>
-              <p className="text-2xl font-semibold">Welcome back</p>
+              <p className="text-2xl font-semibold">Welcome back</p> */}
             </div>
           </div>
 
           <div className="max-w-md">
             <h2 className="text-white text-4xl font-bold leading-tight">
-              Beauty that feels <span className="text-accent">premium</span>.
+              Make your bike look <span className="text-accent">PREMIUM</span>.
             </h2>
             <p className="mt-4 text-white/80 text-base leading-relaxed">
               Sign in to manage your products, orders, and customer experience —
@@ -88,35 +90,37 @@ export default function LoginPage() {
         </div>
 
         {/* Right side (form) */}
-        <div className="flex items-center justify-center px-6 sm:px-10">
+        <div className="flex items-center justify-center px-4 py-6 sm:px-6 sm:py-8 md:px-10">
           <div className="w-full max-w-md">
-            <div className="rounded-3xl border border-white/15 bg-white/10 backdrop-blur-xl shadow-2xl overflow-hidden">
+            <div className="rounded-2xl sm:rounded-3xl border border-white/15 bg-white/10 backdrop-blur-xl shadow-2xl overflow-hidden">
               {/* top accent bar */}
               <div className="h-1.5 w-full bg-gradient-to-r from-accent via-white/40 to-accent" />
 
-              <div className="p-8 sm:p-10">
+              <div className="p-5 sm:p-8 md:p-10">
                 {/* mobile logo */}
-                <div className="lg:hidden flex justify-center mb-6">
-                  <img src="/logo.png" alt="ND Logo" className="h-10 w-auto" />
+                <div className="lg:hidden flex justify-center mb-5 sm:mb-6">
+                  <img src="/logo.png" alt="ND Logo" className="h-9 sm:h-10 w-auto" />
                 </div>
 
                 <div className="text-center">
-                  <h1 className="text-2xl sm:text-3xl font-semibold text-white">
-                    Sign in to ND
+                  <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white leading-tight">
+                    Sign in to RIDEX
                   </h1>
-                  <p className="mt-2 text-sm text-white/70">
+                  <p className="mt-2 text-xs sm:text-sm text-white/70">
                     Use your email and password to continue
                   </p>
                 </div>
 
-                <div className="mt-8 space-y-4">
+                <div className="mt-6 sm:mt-8 space-y-4">
                   <div className="space-y-2">
                     <label className="text-sm text-white/80">Email</label>
                     <input
                       type="email"
-                      placeholder="you@example.com"
+                      name="email"
+                      autoComplete="email"
+                      placeholder="you@gmail.com"
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full h-11 rounded-xl bg-white/90 px-4 text-secondary placeholder:text-secondary/50 outline-none ring-1 ring-white/20 focus:ring-2 focus:ring-accent transition"
+                      className="w-full h-11 sm:h-12 rounded-xl bg-white/90 px-4 text-secondary placeholder:text-secondary/50 outline-none ring-1 ring-white/20 focus:ring-2 focus:ring-accent transition"
                     />
                   </div>
 
@@ -124,43 +128,55 @@ export default function LoginPage() {
                     <label className="text-sm text-white/80">Password</label>
                     <input
                       type="password"
+                      name="password"
+                      autoComplete="current-password"
                       placeholder="••••••••"
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full h-11 rounded-xl bg-white/90 px-4 text-secondary placeholder:text-secondary/50 outline-none ring-1 ring-white/20 focus:ring-2 focus:ring-accent transition"
+                      className="w-full h-11 sm:h-12 rounded-xl bg-white/90 px-4 text-secondary placeholder:text-secondary/50 outline-none ring-1 ring-white/20 focus:ring-2 focus:ring-accent transition"
                     />
                   </div>
+
                   <div className="flex items-center justify-end">
-                    <Link to="/forget-password" className="text-accent hover:underline underline-offset-4">Forgot Password ?</Link>
+                    <Link
+                      to="/forget-password"
+                      className="text-sm text-white hover:underline underline-offset-4"
+                    >
+                      Forgot Password ?
+                    </Link>
                   </div>
 
                   <button
                     onClick={login}
-                    className="mt-2 w-full h-11 rounded-xl bg-accent text-white font-semibold shadow-lg shadow-accent/30 hover:brightness-110 active:scale-[0.99] transition"
+                    className="mt-2 w-full h-11 sm:h-12 rounded-xl bg-accent text-white font-semibold shadow-lg shadow-accent/30 hover:brightness-110 active:scale-[0.99] transition"
                   >
                     Login
                   </button>
+
                   <button
                     onClick={googleLogin}
-                    className="mt-2 w-full h-11 rounded-xl bg-accent text-white font-semibold shadow-lg shadow-accent/30 hover:brightness-110 active:scale-[0.99] transition"
+                    className="mt-2 w-full h-11 sm:h-12 rounded-xl bg-accent text-white font-semibold shadow-lg shadow-accent/30 hover:brightness-110 active:scale-[0.99] transition"
                   >
                     Google Login
                   </button>
 
-                  <div className="pt-4 flex items-center justify-center gap-2 text-xs text-white/60">
-                    <span className="h-px w-12 bg-white/20" />
-                    <span>New to ND ? </span>
-                    <Link to="/register"
-                    className="text-accent hover:underline underline-offset-4"
-                    >Create you</Link>
-                    <span className="h-px w-12 bg-white/20" />
+                  <div className="pt-3 sm:pt-4 flex flex-wrap items-center justify-center gap-2 text-[11px] sm:text-xs text-white/60 text-center">
+                    <span className="h-px w-8 sm:w-12 bg-white/20" />
+                    <span>New to RIDEX ?</span>
+                    <Link
+                      to="/register"
+                      className="text-tertiary hover:underline underline-offset-4"
+                    >
+                      Create you
+                    </Link>
+                    <span className="h-px w-8 sm:w-12 bg-white/20" />
                   </div>
                 </div>
               </div>
             </div>
 
             {/* tiny footer */}
-            <p className="mt-6 text-center text-xs text-white/60">
-              © {new Date().getFullYear()} ND — Global • All rights reserved
+            <p className="mt-4 sm:mt-6 text-center text-[11px] sm:text-xs text-white/60 px-2">
+              © {new Date().getFullYear()} RIDEX — Global • All rights reserved
             </p>
           </div>
         </div>

@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { CiCirclePlus } from "react-icons/ci";
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { Loader } from "../../src/components/loader,";
+import { Loader } from "../../src/components/loader";
 import { MdOutlineAdminPanelSettings, MdVerified } from "react-icons/md";
 
 function UserBlockConfirm(props){
