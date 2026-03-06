@@ -39,28 +39,66 @@ export default function UserSettings() {
   }, []);
 
   async function updateUserData() {
-    const data={
-      firstName:firstName,
-      lastName:lastName,
-      image : user.image
+  try {
+    let imageLink = user?.image || "";
+
+    if (image != null) {
+      imageLink = await mediaUpload(image);
+      console.log("Uploaded image link:", imageLink);
     }
-    if(image != null){
-        const link= await mediaUpload(image);
-        image.profilePicture = link;
-    }
-    await axios.put(import.meta.env.VITE_API_URL+"/api/users/me",data,{
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("token"),
-      },
-    }).then(()=>{
-      toast.success("Profile updated successfully");
-    }).catch((err)=>{
-        console.error("update failed", err);
-      toast.error("Failed to update profile");
-    });
+
+    const data = {
+      firstName: firstName,
+      lastName: lastName,
+      image: imageLink,
+    };
+
+    console.log("Sending data:", data);
+
+    await axios.put(
+      import.meta.env.VITE_API_URL + "/api/users/me",
+      data,
+      {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      }
+    );
+
+    toast.success("Profile updated successfully");
+    window.dispatchEvent(new Event("userUpdated"));
     navigate("/");
-    
+  } catch (err) {
+    console.error("update failed", err);
+    toast.error("Failed to update profile");
   }
+}
+
+  // async function updateUserData() {
+  //   let imageLink=user.image;
+
+  //   if(image != null){
+  //       const link= await mediaUpload(image);
+  //   }
+
+  //   const data={
+  //     firstName:firstName,
+  //     lastName:lastName,
+  //     image : imageLink
+  //   }
+  //   await axios.put(import.meta.env.VITE_API_URL+"/api/users/me",data,{
+  //     headers: {
+  //       Authorization: "Bearer " + localStorage.getItem("token"),
+  //     },
+  //   }).then(()=>{
+  //     toast.success("Profile updated successfully");
+  //   }).catch((err)=>{
+  //       console.error("update failed", err);
+  //     toast.error("Failed to update profile");
+  //   });
+  //   navigate("/");
+    
+  // }
 
   async function updatePassword() {
     if (password !== confirmPassword) {
@@ -86,8 +124,17 @@ export default function UserSettings() {
   }
 
   return (
-    <div className="w-full min-h-screen bg-[url('/bg.jpg')] bg-cover bg-center bg-no-repeat flex justify-center items-center p-6">
+    <div className="w-full min-h-screen bg-accent/20 bg-cover bg-center bg-no-repeat flex justify-center items-center p-6">
       {/* Big wrapper */}
+       <div className=" fixed top-3 left-3 mb-6">
+        <button
+          onClick={() => navigate(-1)}
+          className="px-4 py-2 rounded-xl bg-accent/90 text-white hover:bg-accent/50"
+        >
+          ← Back
+        </button>
+      </div>
+
       <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* LEFT: USER INFO */}
         <div className="backdrop-blur-2xl bg-white/20 rounded-3xl shadow-2xl border border-white/30 p-6 sm:p-8">
@@ -102,10 +149,14 @@ export default function UserSettings() {
               {image ? (
                 <img
                   src={URL.createObjectURL(image)}
-                  alt="preview"
                   className="w-full h-full object-cover"
                 />
-              ) : (
+              ) : user?.image ? (
+                <img
+                  src={user.image}
+                  className="w-full h-full object-cover"
+                />
+              ): (
                 <span className="text-secondary/70 text-sm">No Image</span>
               )}
             </div>

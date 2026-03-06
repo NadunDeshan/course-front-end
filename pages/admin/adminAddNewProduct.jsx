@@ -27,7 +27,7 @@ export function AddProductPage() {
         promises[i] = mediaUpload(images[i])
     }
     try{const urls =await Promise.all(promises);
-        const alternativeNames = altNames.split(",");
+        const alternativeNames = altName.split(",");
 
         const product={
             productID :productID,
@@ -106,7 +106,7 @@ export function AddProductPage() {
                 Alternative Names
               </label>
               <input
-                value={altNames}
+                value={altName}
                 onChange={(e) => {
                   setAltNames(e.target.value);
                 }}
@@ -199,9 +199,9 @@ export function AddProductPage() {
                 }}
                 className="w-full h-12 rounded-xl bg-white/80 px-4 text-secondary outline-none ring-1 ring-white/25 focus:ring-2 focus:ring-accent transition"
               >
-                <option value="cream">Cream</option>
-                <option value="lotion">Lotion</option>
-                <option value="serum">Serum</option>
+                <option value="Accessories">Accessories</option>
+                <option value="Parts">Parts</option>
+                <option value="RidingGear">RidingGear</option>
               </select>
             </div>
 

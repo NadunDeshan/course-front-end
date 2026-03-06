@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import mediaUpload from "../../utils/mediaUpload";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import axios from "axios";
 
 export function UpdateProductPage() {
   const location = useLocation();
   const [productID, setProductId] = useState(location.state.productID); 
   const [name, setName] = useState(location.state.name);
-  const [altNames, setAltNames] = useState(location.state.altName.join(","));
+  const [altName, setAltNames] = useState(
+  Array.isArray(location.state?.altName) ? location.state.altName.join(",") : "");
   const [description, setDescription] = useState(location.state.description);
   const [images, setImages] = useState([]);
   const [price, setPrice] = useState(location.state.price);
@@ -33,7 +34,7 @@ export function UpdateProductPage() {
             urls=location.state.images
         }
 
-      const alternativeNames = altNames.split(",");
+      const alternativeNames = altName.split(",");
 
       const product = {
         productID: productID,
@@ -114,7 +115,7 @@ export function UpdateProductPage() {
                 Alternative Names
               </label>
               <input
-                value={altNames}
+                value={altName}
                 onChange={(e) => {
                   setAltNames(e.target.value);
                 }}
@@ -207,9 +208,9 @@ export function UpdateProductPage() {
                 }}
                 className="w-full h-12 rounded-xl bg-white/80 px-4 text-secondary outline-none ring-1 ring-white/25 focus:ring-2 focus:ring-accent transition"
               >
-                <option value="cream">Cream</option>
-                <option value="lotion">Lotion</option>
-                <option value="serum">Serum</option>
+                <option value="Accessories">Accessories</option>
+                <option value="Parts">Parts</option>
+                <option value="RidingGear">RidingGear</option>
               </select>
             </div>
 
