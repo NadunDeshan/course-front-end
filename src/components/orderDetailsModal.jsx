@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function OrderDetailsModal({
@@ -8,7 +8,12 @@ export default function OrderDetailsModal({
   closeModel,
   refresh,
 }) {
-    const[status,setStatus]= useState(selectedOrder?.status);
+  const [status, setStatus] = useState("");
+
+  useEffect(() => {
+    setStatus(selectedOrder?.status || "");
+  }, [selectedOrder]);
+
   if (!isModelOpen || !selectedOrder) return null;
 
   return (
@@ -46,18 +51,30 @@ export default function OrderDetailsModal({
             <div className="bg-white/60 rounded-xl p-4 border border-black/10">
               <h3 className="text-secondary font-semibold mb-3">Customer</h3>
               <div className="space-y-2 text-secondary text-sm">
-                <p><b>Name:</b> {selectedOrder.customerName}</p>
-                <p><b>Email:</b> {selectedOrder.email}</p>
-                <p><b>Phone:</b> {selectedOrder.phone}</p>
-                <p><b>Address:</b> {selectedOrder.address}</p>
+                <p>
+                  <b>Name:</b> {selectedOrder.customerName}
+                </p>
+                <p>
+                  <b>Email:</b> {selectedOrder.email}
+                </p>
+                <p>
+                  <b>Phone:</b> {selectedOrder.phone}
+                </p>
+                <p>
+                  <b>Address:</b> {selectedOrder.address}
+                </p>
               </div>
             </div>
 
             <div className="bg-white/60 rounded-xl p-4 border border-black/10">
               <h3 className="text-secondary font-semibold mb-3">Summary</h3>
               <div className="space-y-2 text-secondary text-sm">
-                <p><b>Total Items:</b> {selectedOrder.items.length}</p>
-                <p><b>Total:</b> {"LKR " + selectedOrder.total.toFixed(2)}</p>
+                <p>
+                  <b>Total Items:</b> {selectedOrder.items.length}
+                </p>
+                <p>
+                  <b>Total:</b> {"LKR " + selectedOrder.total.toFixed(2)}
+                </p>
                 <p>
                   <b>Status:</b>{" "}
                   <span className="px-3 py-1 rounded-full text-xs font-semibold bg-accent text-primary">
@@ -87,9 +104,7 @@ export default function OrderDetailsModal({
                   />
 
                   <div className="flex-1">
-                    <p className="text-secondary font-semibold">
-                      {item.name}
-                    </p>
+                    <p className="text-secondary font-semibold">{item.name}</p>
                     <p className="text-secondary/70 text-sm">
                       Product ID: {item.productID}
                     </p>
@@ -110,43 +125,48 @@ export default function OrderDetailsModal({
           {/* FOOTER */}
           <div className="flex justify-end gap-3">
             <select
-            defaultValue={selectedOrder.status}
-            onChange={(e) => setStatus(e.target.value)}
-  className="w-full px-4 py-2 rounded-xl bg-white/70 border border-black/10 
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className="w-full px-4 py-2 rounded-xl bg-white/70 border border-black/10 
              text-secondary font-medium 
              focus:outline-none focus:ring-2 focus:ring-accent 
              hover:bg-white transition"
-                >
-                <option value="processing">Processing</option>
-                <option value="shipped">Shipped</option>
-                <option value="completed">Completed</option>
-                <option value="cancelled">Cancelled</option>
-                <option value="refunded">Refunded</option>
-                <option value="pending">Pending</option>
-                </select>
+            >
+              <option value="Pending">Pending</option>
+              <option value="Confirmed">Confirmed</option>
+              <option value="Processing">Processing</option>
+              <option value="Shipped">Shipped</option>
+              <option value="Delivered">Delivered</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
 
             <button
               className="px-5 py-2 rounded-xl border border-black/10 bg-white/70 text-secondary hover:bg-white"
-              onClick={()=>{
+              onClick={() => {
                 const token = localStorage.getItem("token");
                 axios
-                .put(import.meta.env.VITE_API_URL + "/api/orders/status/" + selectedOrder.orderID, {status : status},{
-                  headers: {
-                    Authorization: "Bearer " + token
-                  }}
-                
-            )
-            .then(()=> {
-                toast.success("Order updated successfully");
-                closeModel();
-                refresh();
-              })
-              .catch((err) => {
-                console
-                toast.error("Failed to update order")
-              })
-              
-              }}disabled = {status == selectedOrder.status}
+                  .put(
+                    import.meta.env.VITE_API_URL +
+                      "/api/orders/status/" +
+                      selectedOrder.orderID,
+                    { status: status },
+                    {
+                      headers: {
+                        Authorization: "Bearer " + token,
+                      },
+                    },
+                  )
+                  .then(() => {
+                    toast.success("Order updated successfully");
+                    closeModel();
+                    refresh();
+                  })
+                  .catch((err) => {
+                    console;
+                    toast.error("Failed to update order");
+                  });
+              }}
+              disabled={status == selectedOrder.status}
             >
               Update
             </button>

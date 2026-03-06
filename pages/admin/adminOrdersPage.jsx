@@ -2,7 +2,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import {  useNavigate } from "react-router-dom";
-import { Loader } from "../../src/components/loader,";
+import { Loader } from "../../src/components/loader";
 import OrderDetailsModal from "../../src/components/orderDetailsModal";
 
 

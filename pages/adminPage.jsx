@@ -10,8 +10,9 @@ import AdminOrdersPage from "./admin/adminOrdersPage";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { Loader } from "../src/components/loader,";
+import { Loader } from "../src/components/loader";
 import AdminUsersPage from "./admin/usersPage";
+import { BiHome, BiLogInCircle } from "react-icons/bi";
 
 export default function AdminPage(){
 
@@ -53,9 +54,9 @@ export default function AdminPage(){
                 {/* Orange brand box */}
                 <div className="flex flex-row w-[90%] h-[70px] bg-accent items-center rounded-2xl px-4 gap-3 shadow-sm mb-[20px]">
                     <img
-                        src="/logo.png"
+                        src="/logo1.png"
                         alt="Crystal Beauty"
-                        className="h-[52px] w-[52px] shrink-0 object-contain"
+                        className="h-[70px] w-[70px] shrink-0 object-cover object-contain"
                     />
 
                     <div className="flex flex-col leading-tight">
@@ -81,6 +82,14 @@ export default function AdminPage(){
                 <HiOutlineUsers className="text-xl"/>
                     Users
                 </Link>
+                 <Link to ="/" className="w-full flex items-center gap-2 px-4 rounded-lg">
+                <BiHome className="text-xl"/>
+                    Go Home Page
+                </Link>
+                <Link to ="/login" className="w-full flex items-center gap-2 px-4 rounded-lg">
+                <BiLogInCircle className="text-xl"/>
+                    Go login page
+                </Link>
             </div>
 
         
@@ -94,6 +103,7 @@ export default function AdminPage(){
                     <Route path="/add-product" element={<AddProductPage/>}/>
                     <Route path ="/update-product" element={<UpdateProductPage/>}/>
                     <Route path="/users" element={<AdminUsersPage/>}/>
+                    
                 </Routes>:<Loader/>}
                 </div>
             </div>
